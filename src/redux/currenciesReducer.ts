@@ -10,7 +10,8 @@ const initialState = {
     allCurrencies: [] as Array<CurrencyType>,
     firstCurrency: '',
     secondCurrency: '',
-    rate: null as null | number
+    rate: null as null | number,
+    amount: 1
 }
 
 export const currenciesReducer = (state = initialState, action: ActionsType): InitialStateType => {
@@ -42,6 +43,11 @@ export const currenciesReducer = (state = initialState, action: ActionsType): In
                 ...state,
                 rate: action.rate
             }
+        case 'C/CURRENCIES/SET_AMOUNT':
+            return {
+                ...state,
+                amount: action.amount
+            }
         default: return state
     }
 }
@@ -54,6 +60,7 @@ export const actions = {
     setFirstCurrency: (firstCurrency: string) => ({ type: 'C/CURRENCIES/SET_FIRST_CURRENCY', firstCurrency } as const),
     setSecondCurrency: (secondCurrency: string) => ({ type: 'C/CURRENCIES/SET_SECOND_CURRENCY', secondCurrency } as const),
     setRate: (rate: number) => ({ type: 'C/CURRENCIES/SET_RATE', rate } as const),
+    setAmount: (amount: number) => ({ type: 'C/CURRENCIES/SET_AMOUNT', amount } as const),
 }
 
 export const onGetAllCurrencies = (): ThunkType => async dispatch => {
@@ -63,10 +70,7 @@ export const onGetAllCurrencies = (): ThunkType => async dispatch => {
     dispatch(actions.setIsFetching(false))
 }
 
-export const onGetRate = (): ThunkType => async (dispatch, getState) => {
-    const first = getState().currencies.firstCurrency
-    const second = getState().currencies.secondCurrency
-
+export const onGetRate = (first: string, second: string): ThunkType => async dispatch => {
     dispatch(actions.setIsFetching(true))
     const rateData = await api.getRate(first, second)
     dispatch(actions.setRate(Object.values(rateData)[0] as number))
