@@ -47,7 +47,7 @@ export const onGetAllCurrencies = (): ThunkType => async dispatch => {
     const currenciesData = await api.getAllCurrencies()
     dispatch(actions.setIsFetching(false))
 
-    dispatch(actions.setAllCurrencies(currenciesData.results))
+    dispatch(actions.setAllCurrencies(Object.values(currenciesData.results)))
 }
 
 export type InitialStateType = typeof initialState
