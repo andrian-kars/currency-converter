@@ -1,4 +1,4 @@
-import s from './List.module.scss'
+import s from './../Current/Current.module.scss'
 import { memo } from "react"
 import { CurrencyType } from "../../types"
 import { Field, Form, Formik } from 'formik'
@@ -16,6 +16,7 @@ type FormType = {
 export const ListForm: React.FC<PropsType> = memo(({ allCurrencies, getRate, first, second }) => {
     const submit = (values: FormType, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         getRate(values.first)
+        localStorage.setItem('listCurrency', values.first)
         setSubmitting(false)
     }
 

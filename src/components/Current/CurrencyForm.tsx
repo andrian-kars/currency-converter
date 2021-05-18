@@ -18,6 +18,7 @@ type FormType = {
 export const CurrencyForm: React.FC<PropsType> = memo(({ allCurrencies, getRate, first, second }) => {
     const submit = (values: FormType, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         getRate(values.first, values.second)
+        localStorage.setItem('currentCurrencies', `${values.first}, ${values.second}`)
         setSubmitting(false)
     }
 

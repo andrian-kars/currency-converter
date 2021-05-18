@@ -2,11 +2,11 @@ import s from './Current.module.scss'
 import { AppStateType } from './../../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { actions, onGetAllCurrencies, onGetRate } from './../../redux/currenciesReducer'
-import { useEffect } from 'react'
+import { memo, useEffect } from 'react'
 import { Preloader } from './../Common/Preloader/Preloader'
 import { CurrencyForm } from './CurrencyForm'
 
-export const Current: React.FC = () => {
+export const Current: React.FC = memo(() => {
     const isFetching = useSelector((state: AppStateType) => state.currencies.isFetching)
     const allCurrencies = useSelector((state: AppStateType) => state.currencies.allCurrencies)
     const rate = useSelector((state: AppStateType) => state.currencies.rate)
@@ -16,7 +16,10 @@ export const Current: React.FC = () => {
 
     const dispatch = useDispatch()
 
-    const setAmount = (amount: number) => { dispatch(actions.setAmount(amount)) }
+    const setAmount = (amount: number) => {
+        dispatch(actions.setAmount(amount))
+        localStorage.setItem('currentAmount', `${amount}`)
+    }
 
     useEffect(() => {
         if (allCurrencies.length === 0) {
@@ -25,6 +28,22 @@ export const Current: React.FC = () => {
     }, [dispatch, allCurrencies])
 
     const getRate = (first: string, second: string) => { dispatch(onGetRate(first, second)) }
+
+    const localCurrentCurrencies = localStorage.getItem('currentCurrencies')
+    const localCurrentAmount = localStorage.getItem('currentAmount')
+
+    // LocalStorage
+    useEffect(() => {
+        if (localCurrentCurrencies === null) {
+            localStorage.setItem('currentCurrencies', `${allCurrencies[0].id}, ${allCurrencies[0].id}`)
+        } else {
+            dispatch(actions.setFirstCurrency(localCurrentCurrencies.split(', ')[0]))
+            dispatch(actions.setSecondCurrency(localCurrentCurrencies.split(', ')[1]))
+        }
+        localCurrentAmount === null ? localStorage.setItem('currentAmount', `${amount}`)
+            : dispatch(actions.setAmount(+localCurrentAmount))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return <div className={s.current}>
         <div className={s.formWhrapper}>
@@ -38,4 +57,4 @@ export const Current: React.FC = () => {
             }
         </div>}
     </div>
-}
+})
