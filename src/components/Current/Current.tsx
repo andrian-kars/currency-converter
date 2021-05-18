@@ -19,15 +19,17 @@ export const Current: React.FC = () => {
     const setAmount = (amount: number) => { dispatch(actions.setAmount(amount)) }
 
     useEffect(() => {
-        dispatch(onGetAllCurrencies())
-    }, [dispatch])
+        if (allCurrencies.length === 0) {
+            dispatch(onGetAllCurrencies())
+        }
+    }, [dispatch, allCurrencies])
 
     const getRate = (first: string, second: string) => { dispatch(onGetRate(first, second)) }
 
     return <div className={s.current}>
         <div className={s.formWhrapper}>
             <input className={s.amount} type="number" min="1" max="999999" value={amount} onChange={(e) => { setAmount(+e.currentTarget.value) }} />
-            <CurrencyForm allCurrencies={allCurrencies} getRate={getRate} />
+            <CurrencyForm allCurrencies={allCurrencies} getRate={getRate} first={firstCurrency} second={secondCurrency} />
         </div>
         {isFetching ? <Preloader /> : <div className={s.infoWhrapper}>
             {rate === null

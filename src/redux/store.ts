@@ -1,9 +1,11 @@
 import { Action, applyMiddleware, combineReducers, createStore } from 'redux'
 import thunk, { ThunkAction } from 'redux-thunk'
 import { currenciesReducer } from './currenciesReducer'
+import { listReducer } from './listReducer'
 
 const rootReducer = combineReducers({
-    currencies: currenciesReducer
+    currencies: currenciesReducer,
+    list: listReducer,
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

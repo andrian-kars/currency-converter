@@ -1,49 +1,36 @@
 import { api } from "../api"
-import { CurrencyType } from "../types"
 import { BaseThunkType, InferActionsTypes } from "./store"
 
 const initialState = {
     // Common
     isFetching: false,
-    isSubFetching: false,
     // Main
-    allCurrencies: [] as Array<CurrencyType>,
     firstCurrency: '',
-    secondCurrency: '',
+    secondCurrency: 'UAH',
     rate: null as null | number,
     amount: 1
 }
 
-export const currenciesReducer = (state = initialState, action: ActionsType): InitialStateType => {
+export const listReducer = (state = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
         // Common
-        case 'C/CURRENCIES/TOGGLE_IS_FETCHING':
+        case 'C/LIST/TOGGLE_IS_FETCHING':
             return {
                 ...state,
                 isFetching: action.isFetching
             }
         // Main
-        case 'C/CURRENCIES/SET_ALL_CURRENCIES':
-            return {
-                ...state,
-                allCurrencies: action.allCurrencies
-            }
-        case 'C/CURRENCIES/SET_FIRST_CURRENCY':
+        case 'C/LIST/SET_FIRST_CURRENCY':
             return {
                 ...state,
                 firstCurrency: action.firstCurrency
             }
-        case 'C/CURRENCIES/SET_SECOND_CURRENCY':
-            return {
-                ...state,
-                secondCurrency: action.secondCurrency
-            }
-        case 'C/CURRENCIES/SET_RATE':
+        case 'C/LIST/SET_RATE':
             return {
                 ...state,
                 rate: action.rate
             }
-        case 'C/CURRENCIES/SET_AMOUNT':
+        case 'C/LIST/SET_AMOUNT':
             return {
                 ...state,
                 amount: action.amount
@@ -54,26 +41,17 @@ export const currenciesReducer = (state = initialState, action: ActionsType): In
 
 export const actions = {
     // Common
-    setIsFetching: (isFetching: boolean) => ({ type: 'C/CURRENCIES/TOGGLE_IS_FETCHING', isFetching } as const),
+    setIsFetching: (isFetching: boolean) => ({ type: 'C/LIST/TOGGLE_IS_FETCHING', isFetching } as const),
     // Main
-    setAllCurrencies: (allCurrencies: Array<CurrencyType>) => ({ type: 'C/CURRENCIES/SET_ALL_CURRENCIES', allCurrencies } as const),
-    setFirstCurrency: (firstCurrency: string) => ({ type: 'C/CURRENCIES/SET_FIRST_CURRENCY', firstCurrency } as const),
-    setSecondCurrency: (secondCurrency: string) => ({ type: 'C/CURRENCIES/SET_SECOND_CURRENCY', secondCurrency } as const),
-    setRate: (rate: number) => ({ type: 'C/CURRENCIES/SET_RATE', rate } as const),
-    setAmount: (amount: number) => ({ type: 'C/CURRENCIES/SET_AMOUNT', amount } as const),
+    setFirstCurrency: (firstCurrency: string) => ({ type: 'C/LIST/SET_FIRST_CURRENCY', firstCurrency } as const),
+    setRate: (rate: number) => ({ type: 'C/LIST/SET_RATE', rate } as const),
+    setAmount: (amount: number) => ({ type: 'C/LIST/SET_AMOUNT', amount } as const),
 }
 
-export const onGetAllCurrencies = (): ThunkType => async dispatch => {
-    dispatch(actions.setIsFetching(true))
-    const currenciesData = await api.getAllCurrencies()
-    dispatch(actions.setAllCurrencies(Object.values(currenciesData.results)))
-    dispatch(actions.setIsFetching(false))
-}
-
-export const onGetRate = (first: string, second: string): ThunkType => async dispatch => {
+export const onGetRate = (first: string): ThunkType => async (dispatch, getState) => {
+    const second = getState().list.secondCurrency
     dispatch(actions.setIsFetching(true))
     dispatch(actions.setFirstCurrency(first))
-    dispatch(actions.setSecondCurrency(second))
     const rateData = await api.getRate(first, second)
     dispatch(actions.setRate(Object.values(rateData)[0] as number))
 

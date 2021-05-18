@@ -5,6 +5,8 @@ import { Field, Form, Formik } from 'formik'
 
 type PropsType = {
     allCurrencies: Array<CurrencyType>
+    first: string
+    second: string
     getRate: (first: string, second: string) => void
 }
 
@@ -13,7 +15,7 @@ type FormType = {
     second: string
 }
 
-export const CurrencyForm: React.FC<PropsType> = memo(({ allCurrencies, getRate }) => {
+export const CurrencyForm: React.FC<PropsType> = memo(({ allCurrencies, getRate, first, second }) => {
     const submit = (values: FormType, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         getRate(values.first, values.second)
         setSubmitting(false)
@@ -22,7 +24,7 @@ export const CurrencyForm: React.FC<PropsType> = memo(({ allCurrencies, getRate 
     return <div className={s.form}>
         <Formik
             enableReinitialize
-            initialValues={{ first: allCurrencies[0].id, second: allCurrencies[0].id }}
+            initialValues={{ first: first ? first : allCurrencies[0].id, second: second ? second : allCurrencies[0].id }}
             onSubmit={submit}
         >
             {({ isSubmitting }) => (
