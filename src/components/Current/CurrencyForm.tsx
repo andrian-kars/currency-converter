@@ -1,12 +1,10 @@
-import s from './CurrencyForm.module.scss'
+import s from './Current.module.scss'
 import { memo } from "react"
 import { CurrencyType } from "../../types"
 import { Field, Form, Formik } from 'formik'
 
 type PropsType = {
     allCurrencies: Array<CurrencyType>
-    first: (value: string) => void
-    second: (value: string) => void
     getRate: (first: string, second: string) => void
 }
 
@@ -15,11 +13,9 @@ type FormType = {
     second: string
 }
 
-export const CurrencyForm: React.FC<PropsType> = memo(({ allCurrencies, first, second, getRate }) => {
+export const CurrencyForm: React.FC<PropsType> = memo(({ allCurrencies, getRate }) => {
     const submit = (values: FormType, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         getRate(values.first, values.second)
-        first(values.first)
-        second(values.second)
         setSubmitting(false)
     }
 
@@ -37,7 +33,7 @@ export const CurrencyForm: React.FC<PropsType> = memo(({ allCurrencies, first, s
                     <Field as="select" name="second">
                         {allCurrencies.map(el => <option key={el.id}>{el.id}</option>)}
                     </Field>
-                    <button type="submit" disabled={isSubmitting}>Get</button>
+                    <button className={s.button} type="submit" disabled={isSubmitting}>Get</button>
                 </Form>
             )}
         </Formik>

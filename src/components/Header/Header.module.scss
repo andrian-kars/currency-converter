@@ -1,0 +1,51 @@
+@import './../../styles/variables';
+
+.header {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    background-color: $headerColor;
+    z-index: 69;
+}
+
+.navigation {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.navigator {
+    padding: 13px 20px 11px;
+
+    @media (min-width: 768px) {
+        padding: 15px 30px;
+    }
+}
+
+.link {
+    svg {
+        width: 22px;
+        height: 22px;
+        fill: $whiteColor;
+    }
+
+    &:hover {
+        svg {
+            fill: $secondaryColor;
+        }
+    }
+
+    @media (min-width: 768px) {
+        svg {
+            width: 26px;
+            height: 26px;
+            fill: $whiteColor;
+        }
+    }
+}
+
+.active {
+    svg {
+        fill: $secondaryColor;
+    }
+}

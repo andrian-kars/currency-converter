@@ -5,6 +5,7 @@ import { BaseThunkType, InferActionsTypes } from "./store"
 const initialState = {
     // Common
     isFetching: false,
+    isSubFetching: false,
     // Main
     allCurrencies: [] as Array<CurrencyType>,
     firstCurrency: '',

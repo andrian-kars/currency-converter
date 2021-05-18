@@ -1,0 +1,60 @@
+@import './../../styles/variables';
+
+.current {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.formWhrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom:  20px;
+}
+
+.amount::-webkit-inner-spin-button,
+.amount::-webkit-outer-spin-button
+{
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.amount, select, .button {
+  height: 42px;
+  line-height: 1.65;
+  margin: 0 10px 0 0;
+  padding: 0 20px;
+}
+
+.amount {
+  display: block;
+  border: 1px solid $btnColor;
+}
+
+select {
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.button {
+  background-color: $btnColor;
+  cursor: pointer;
+  color: $whiteColor;
+  padding: 0 40px;
+  margin: 0;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: $headerColor;
+  }
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  color: $btnColor;
+  font-size: 22px;
+  font-weight: 700;
+}
